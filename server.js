@@ -6,11 +6,14 @@ const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
 
 //Get API Resources
 const api = require('./server/routes/api');
+const users = require('./server/routes/user');
 
 const app = express();
+app.use(morgan('common'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -22,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 // Set our api routes
 app.use('/api', api);
+app.use('/user', users);
 
 // Catch all other routs and return the index file
 app.get('*', (request, response) => {
@@ -37,8 +41,9 @@ let server;
 //const server = http.createServer(app);
 function runServer() {
   return new Promise((resolve, reject) => {
-
-    mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}`, err => {
+    mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}`,
+      {uri_decode_auth: true},
+      err => {
       if (err) {
         return reject(err);
       }
@@ -55,6 +60,24 @@ function runServer() {
   })
 }
 
-// Listen on provide port, on all network interfaces
-server.listen(port, () => {
-});
+function closeServer() {
+  return mongoose.disconnect().then(() => {
+    return new Promise((resolve, reject) => {
+      console.log('Closing Server');
+      server.close(err => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
+    });
+  });
+}
+
+if (require.main === module) {
+  runServer().catch(err => console.error(err));
+};
+
+module.exports = {runServer, app, closeServer};
+
+
