@@ -1,3 +1,21 @@
 const mongoose = require('mongoose');
+const UserSchema =  new mongoose.Schema({
+  name: String,
+  description: String,
+  comments: [
+    {
+      user: ObjectId,
+      text: String
+    }
+  ],
+  downloads: Number,
+  views: Number,
+  owner: ObjectId,
 
-mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}`);
+});
+
+const User = mongoose.model('User', UserSchema);
+export User;
+
+
+
