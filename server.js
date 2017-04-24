@@ -11,6 +11,7 @@ const morgan = require('morgan');
 //Get API Resources
 const api = require('./server/routes/api');
 const users = require('./server/routes/user');
+const stl = require('./server/routes/stl');
 
 const app = express();
 app.use(morgan('common'));
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 // Set our api routes
 app.use('/api', api);
 app.use('/user', users);
+app.use('/stl', stl);
 
 // Catch all other routs and return the index file
 app.get('*', (request, response) => {

@@ -19,7 +19,11 @@ const UserSchema =  new mongoose.Schema({
     type: String,
     required: true,
   },
-  Role: String,
+  Role: {
+    type: String,
+    enum: ['Admin','User','Banned','Mod','GAdmin','Unconfirmed']
+
+  },
   Favorites: [mongoose.Schema.Types.ObjectId],
   Active: Boolean
 });

@@ -1,20 +1,14 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 
 
 const {User} = require('../models/user');
+const {getMissingFields} = require('../helpers/validation');
 
 router.post('/', (request, response) => {
   const required_fields = ['email', 'password', 'username'];
-  let missingfields = [];
-  for (let i=0; i<required_fields.length; i++) {
-    const field = required_fields[i];
-    if (!(field in request.body)) {
-      missingfields.push('`' + field + '`');
-    }
-  }
+  let missingfields = getMissingFields(required_fields, request.body);
 
   if (missingfields.length) {
     return response.status(400).send(`Missing ${missingfields.toString()} in request body`);

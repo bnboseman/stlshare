@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
-const user = require('./user');
 
 const StlSchema =  new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    required: true
+  },
   description: String,
   owner: mongoose.Schema.Types.ObjectId,
   comments: [
@@ -12,13 +14,22 @@ const StlSchema =  new mongoose.Schema({
     }
   ],
   license: String,
-  category: [String],
+  category: {
+    type: String,
+    enum: ['Architecture','Education', 'Home & Office', 'Other', 'Science', 'Technology','Toys'],
+  },
   pictures: [{
     order: Number,
     path: String
   }],
-  tags: [String],
-  created: Date,
+  tags: {
+    type: [String],
+    index: true
+  },
+  created: {
+    type: Date,
+    default: Date.now
+  },
   downloads: Number,
   views: Number
 });
@@ -38,7 +49,7 @@ StlSchema.methods.apiRepr = () => {
     view: this.views
   }
 };
-const Stl = mongoose.model('User', StlSchema);
+const Stl = mongoose.model('Stl', StlSchema);
 module.exports = {Stl};
 
 
