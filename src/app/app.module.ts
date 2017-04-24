@@ -6,26 +6,28 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { PostsComponent } from './posts/posts.component';
+import { StlComponent } from './stl/stl.component';
 
-import { PostsService } from './posts.service';
+import { StlService } from './stl.service';
+import { StlDetailComponent } from './stl-detail/stl-detail.component';
 
 const ROUTES = [
   {
     path: '',
-    redirectTo: 'posts',
+    redirectTo: 'stl',
     pathMatch: 'full'
   },
   {
-    path: 'posts',
-    component: PostsComponent
+    path: 'stl',
+    component: StlComponent
   }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    PostsComponent
+    StlComponent,
+    StlDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,7 @@ const ROUTES = [
     HttpModule,
     RouterModule.forRoot(ROUTES)
   ],
-  providers: [PostsService],
+  providers: [StlService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
