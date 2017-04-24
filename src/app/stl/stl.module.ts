@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StlComponent } from './stl.component';
+import { StlListComponent } from './stl-list.component';
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  declarations: [StlComponent]
+  declarations: [StlListComponent]
 })
 export class StlModule { }

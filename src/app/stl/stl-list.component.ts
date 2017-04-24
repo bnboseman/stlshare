@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { StlService } from '../stl.service';
 
 @Component({
-  selector: 'app-stl',
-  templateUrl: './stl.component.html',
-  styleUrls: ['./stl.component.css']
+  selector: 'app-stl-list',
+  templateUrl: './stl-list.component.html',
+  styleUrls: ['./stl-list.component.css']
 })
-export class StlComponent implements OnInit {
+export class StlListComponent implements OnInit {
   stls: any = [];
 
   constructor(private stlService: StlService) { }

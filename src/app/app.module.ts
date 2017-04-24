@@ -6,10 +6,10 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { StlComponent } from './stl/stl.component';
+import { StlListComponent } from './stl/stl-list.component';
 
 import { StlService } from './stl.service';
-import { StlDetailComponent } from './stl-detail/stl-detail.component';
+import { StlDetailsComponent } from './stl/stl-details.component';
 
 const ROUTES = [
   {
@@ -19,15 +19,15 @@ const ROUTES = [
   },
   {
     path: 'stl',
-    component: StlComponent
+    component: StlListComponent
   }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    StlComponent,
-    StlDetailComponent
+    StlListComponent,
+    StlDetailsComponent
   ],
   imports: [
     BrowserModule,
