@@ -3,9 +3,16 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 
 
-const {User} = require('../models/user');
+const {User} = require('./model');
 const {getMissingFields} = require('../helpers/validation');
 
+router.get('/:id', (request, response) => {
+  User.findById(request.params.id)
+    .exec()
+    .then(user => {
+      return response.json(user.apiRepr());
+    });
+});
 router.post('/', (request, response) => {
   const required_fields = ['email', 'password', 'username'];
   let missingfields = getMissingFields(required_fields, request.body);

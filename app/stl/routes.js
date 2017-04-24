@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const {getMissingFields} = require('../helpers/validation');
-const {Stl} = require('../models/stl');
+const {Stl} = require('./model');
 
 const storage = multer.diskStorage({
   destination: (request, file, callback) => {
@@ -24,7 +24,9 @@ router.get('/', (request, response) => {
 router.get('/:id', (request, response) => {
   Stl.findById(request.params.id)
     .exec()
-    .then(stl => response.json(stl.toObject({versionKey: false})))
+    .then(stl => {
+      return response.json(stl.toObject({versionKey: false}))
+    });
 });
 
 router.post('/', (request, response) => {
