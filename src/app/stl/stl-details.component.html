@@ -1,8 +1,37 @@
 <div class="card card-block">
-  <h2 class="card-title">{{ stl.name }}</h2>
-  <p class="card-text">{{ stl.description }}</p>
-  Tags:
-  <ul>
-    <li *ngFor="let tag of stl.tags">{{ tag }}</li>
-  </ul>
+  <div class="col-md-8">
+    <h2 class="card-title">{{ stl.name }}</h2>
+  </div>
+  <div class="col-md-4">
+    <p class="h4">{{ stl.name }}</p>
+    <p class="card-text">{{ stl.description }}</p>
+    <hr />
+    Tags:
+    <span class="tags-container">
+      <a *ngFor="let tag of stl.tags" [href]="'/tags/' + tag">{{ tag }}</a>
+    </span>
+    <div class="row text-center">
+      <div class="col-md-4">
+        <div class="bg-info text-info counter">
+          <div class="center-block glyphicon glyphicon-eye-open"></div>
+          {{stl.views}}
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="bg-info text-info counter">
+          <div class="center-block glyphicon glyphicon-download-alt"></div>
+          {{stl.downloads}}
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="bg-info text-info counter">
+          <div class="center-block glyphicon glyphicon-comment"></div>
+          {{stl.comments.length}}
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>

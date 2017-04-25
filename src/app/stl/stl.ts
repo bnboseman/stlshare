@@ -4,9 +4,10 @@ export class Stl {
   owner: String;
   comments: [String];
   license: String;
-  category:String;
+  category: String;
   pictures: [String];
   tags: [String];
   created: Date;
   downloads: Number;
+  views: Number;
 };

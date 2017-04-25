@@ -3,7 +3,7 @@ import { StlService } from '../stl.service';
 import { StlDetailsComponent } from './stl-details.component';
 
 @Component({
-  selector: 'stl-list',
+  selector: 'app-stl-list',
   templateUrl: './stl-list.component.html',
   styleUrls: ['./stl-list.component.css']
 })

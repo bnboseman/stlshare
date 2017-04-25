@@ -1,0 +1,14 @@
+.tags-container a:hover {
+  text-decoration: none;
+}
+.tags-container a:after{
+  content: ", ";
+}
+
+.tags-container a:last-of-type:after{
+  content: "";
+}
+
+.counter {
+  padding: 10px;
+}
