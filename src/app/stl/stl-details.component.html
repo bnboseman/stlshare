@@ -1,3 +1,8 @@
-<p>
-  stl-details works!
-</p>
+<div class="card card-block">
+  <h2 class="card-title">{{ stl.name }}</h2>
+  <p class="card-text">{{ stl.description }}</p>
+  Tags:
+  <ul>
+    <li *ngFor="let tag of stl.tags">{{ tag }}</li>
+  </ul>
+</div>

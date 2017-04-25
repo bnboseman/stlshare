@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { StlService } from '../stl.service';
+import { StlDetailsComponent } from './stl-details.component';
 
 @Component({
-  selector: 'app-stl-list',
+  selector: 'stl-list',
   templateUrl: './stl-list.component.html',
   styleUrls: ['./stl-list.component.css']
 })

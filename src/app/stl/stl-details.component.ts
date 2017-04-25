@@ -1,16 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { StlService } from '../stl.service';
+import { Component, Input } from '@angular/core';
+import { Stl } from './stl';
 
 @Component({
-  selector: 'app-stl-details',
+  selector: 'stl-details',
   templateUrl: './stl-details.component.html',
   styleUrls: ['./stl-details.component.css']
 })
-export class StlDetailsComponent implements OnInit {
 
+export class StlDetailsComponent{
+  @Input() stl: Stl;
   constructor() { }
 
-  ngOnInit() {
-  }
-
-}
+};
