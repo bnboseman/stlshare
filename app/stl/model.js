@@ -30,8 +30,14 @@ const StlSchema =  new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  downloads: Number,
-  views: Number
+  views: {
+    type: Number,
+    default: 0
+  },
+  downloads: {
+    type: Number,
+    default: 0
+  },
 });
 
 
