@@ -7,8 +7,7 @@ import { Stl } from './stl';
   styleUrls: ['./stl-details.component.css']
 })
 
-export class StlDetailsComponent{
+export class StlDetailsComponent {
   @Input() stl: Stl;
   constructor() { }
-
 };

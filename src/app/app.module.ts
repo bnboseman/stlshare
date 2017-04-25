@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { StlService } from './stl.service';
 import { StlListComponent } from './stl/stl-list.component';
 import { StlDetailsComponent } from './stl/stl-details.component';
+import { StlListTagsComponent } from './stl/stl-list-tags.component';
 
 const ROUTES = [
   {
@@ -18,6 +19,10 @@ const ROUTES = [
   {
     path: 'stl',
     component: StlListComponent
+  },
+  {
+    path: 'tags/:tag',
+    component: StlListTagsComponent
   }
 ];
 
@@ -25,7 +30,8 @@ const ROUTES = [
   declarations: [
     AppComponent,
     StlListComponent,
-    StlDetailsComponent
+    StlDetailsComponent,
+    StlListTagsComponent
   ],
   imports: [
     BrowserModule,
