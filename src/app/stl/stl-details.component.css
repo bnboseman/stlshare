@@ -12,3 +12,14 @@
 .counter {
   padding: 10px;
 }
+
+.container {
+  border-bottom: 1px solid #d9edf7;
+  padding: 10px 0;
+}
+
+@media (max-width: 768px) {
+  .col-sm-4 {
+    margin: 10px 0;
+  }
+}

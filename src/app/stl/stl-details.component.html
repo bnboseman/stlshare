@@ -1,8 +1,8 @@
-<div class="card card-block">
-  <div class="col-md-8">
+<div class="container">
+  <div class="col-md-8 col-xs-12">
     <h2 class="card-title">{{ stl.name }}</h2>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-4 col-xs-12">
     <p class="h4">{{ stl.name }}</p>
     <p class="card-text">{{ stl.description }}</p>
     <hr />
@@ -11,21 +11,21 @@
       <a *ngFor="let tag of stl.tags" [href]="'/tags/' + tag">{{ tag }}</a>
     </span>
     <div class="row text-center">
-      <div class="col-md-4">
+      <div class="col-sm-4">
         <div class="bg-info text-info counter">
           <div class="center-block glyphicon glyphicon-eye-open"></div>
           {{stl.views}}
         </div>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-sm-4">
         <div class="bg-info text-info counter">
           <div class="center-block glyphicon glyphicon-download-alt"></div>
           {{stl.downloads}}
         </div>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-sm-4">
         <div class="bg-info text-info counter">
           <div class="center-block glyphicon glyphicon-comment"></div>
           {{stl.comments.length}}

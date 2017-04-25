@@ -16,4 +16,9 @@ export class StlService {
     return this.http.get('/api/stl/' + id)
       .map(stl => stl.json());
   }
+
+  getTag(tag) {
+    return this.http.get('/api/stl/tag/' + tag)
+      .map(stls => stls.json());
+  }
 }
