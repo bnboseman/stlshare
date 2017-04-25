@@ -38,6 +38,10 @@ const StlSchema =  new mongoose.Schema({
     type: Number,
     default: 0
   },
+  favorites: {
+    type: Number,
+    default: 0
+  }
 });
 
 
@@ -55,6 +59,12 @@ StlSchema.methods.apiRepr = () => {
     view: this.views
   }
 };
+
+StlSchema.statics.processTags = (tags) => {
+  re = /\s{0,},\s{0,1}/;
+  return tags.split(re);
+}
+
 const Stl = mongoose.model('Stl', StlSchema);
 module.exports = {Stl};
 
