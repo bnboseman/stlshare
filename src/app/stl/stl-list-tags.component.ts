@@ -20,7 +20,6 @@ export class StlListTagsComponent implements OnInit, OnDestroy {
     });
     console.log(this.tag);
     this.stlService.getTag(this.tag).subscribe(stls => {
-      console.log(stls);
       this.stls = stls;
     });
   }
