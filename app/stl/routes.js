@@ -53,11 +53,12 @@ router.get('/:id', (request, response) => {
 
 
 router.post('/', (request, response) => {
-  const required_fields = ['name'];
+  const required_fields = ['name', 'description'];
+
   let missingfields = getMissingFields(required_fields, request.body);
 
   if (missingfields.length) {
-    return response.status(400).send(`Missing ${missingfields.toString()} in request body`);
+    return response.status(400).json({error: `Missing ${missingfields.map(function(field) { return `\`${field}\`` }).join(', ')} in request body`});
   }
 
   let stl_file = request.files
