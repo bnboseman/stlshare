@@ -26,11 +26,13 @@ router.post('/', (request, response) => {
 
   bcrypt.genSalt((error, salt) => {
     if (error) {
+      console.error(error);
       return response.status(500).json({error: 'Internal server error'});
     }
 
     bcrypt.hash(password, salt, (error, hash) => {
       if (error) {
+        console.error(error);
         return response.status(500).json({error: 'Internal server error'});
       }
 
@@ -46,7 +48,7 @@ router.post('/', (request, response) => {
         .then(User => response.status(201).json(User.apiRepr()))
         .catch(error => {
           console.log(error);
-          response.status(500).json({error: 'Could not save User'});
+          response.status(500).json({error: 'Could not save User.'});
         });
     });
   });
@@ -59,26 +61,27 @@ router.post('/authenticate', (request, response) => {
   }, (error, user) => {
     if (error) {
       console.log(error);
-      response.status(500).json({error: 'Could not autenticate User'});
+      response.status(500).json({error: 'Could not autenticate User.'});
     }
 
     if (!user) {
-      return response.json({ success: false, message: 'Authentication failed. User not found.' });
+      return response.json({ success: false, message: 'Authentication failed.' });
     } else if (user) {
       user.validatePassword(request.body.password, (error, isValid) => {
         if (error) {
           return response.status.json({sucess: false, message: 'Authentication failed.'});
         }
         if (isValid) {
-          const token = jwt.sign(user, '2342342', {
-            expiresInMinutes: 1440 // expires in 24 hours
+          const token = jwt.sign(user, process.env.AUTH_KEY, {
+            expiresIn: "1m"
           });
 
           // return the information including token as JSON
-          res.json({
+          response.json({
             success: true,
-            message: 'Enjoy your token!',
-            token: token
+            message: 'User autenticated',
+            token: token,
+            user: user.apiRepr()
           });
         }
       });
