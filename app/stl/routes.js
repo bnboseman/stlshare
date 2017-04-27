@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const {getMissingFields} = require('../helpers/validation');
 const {Stl} = require('./model');
+const passport = require('passport');
 
 const storage = multer.diskStorage({
   destination: (request, file, callback) => {
@@ -58,7 +59,7 @@ router.get('/:id', (request, response) => {
 });
 
 
-router.post('/', (request, response) => {
+router.post('/',  passport.authenticate('jwt', { session: false }), (request, response) => {
   const required_fields = ['name', 'description'];
 
   let missingfields = getMissingFields(required_fields, request.body);
@@ -71,28 +72,26 @@ router.post('/', (request, response) => {
   Stl.create({
     name: request.body.name,
     description: request.body.description,
-    owner: request.body.owner,
+    owner: request.user.id,
     category: request.body.category,
     tags: Stl.processTags(request.body.tags),
   }).then(Stl => response.status(201).json(Stl.toObject()))
     .catch(error => {
-      console.log(error);
+      console.error(error);
       response.status(500).json({error: 'Could not save STL'});
     });
 });
 
-router.post('/:id/comment', (request, response) => {
-  const userid = request.body.user;
+router.post('/:id/comment',  passport.authenticate('jwt', { session: false }), (request, response) => {
   const text = request.body.text;
-
-  if (!text || !userid) {
+  if (!text) {
     return response.status(500).json({error: "Comment could not be posted"});
   }
 
   const options = {
     $push: {
       comments: {
-      user: userid,
+      user: request.user.id,
       text: text
     }}
   };
@@ -102,11 +101,10 @@ router.post('/:id/comment', (request, response) => {
         return response.status(500).json({error: 'Comment could not be posted'});
       }
 
-      console.log(doc);
       return response.status(200).json({sucess: true});
     });
 });
-router.delete('/:id', (request, response) => {
+router.delete('/:id',  passport.authenticate('jwt', { session: false }), (request, response) => {
   Stl
     .findByIdAndRemove(request.params.id)
     .exec()
@@ -119,7 +117,7 @@ router.delete('/:id', (request, response) => {
     });
 });
 
-router.put('/:id', (request, response) => {
+router.put('/:id',  passport.authenticate('jwt', { session: false }), (request, response) => {
   if (!(request.params.id && request.body.id && request.params.id === request.body.id)) {
     response.status(400).json({
       error: 'Request path id and request body id values must match'

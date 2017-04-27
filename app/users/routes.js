@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const jwt    = require('jsonwebtoken');
 
 const {User} = require('./model');
 const {getMissingFields} = require('../helpers/validation');
@@ -52,37 +51,4 @@ router.post('/', (request, response) => {
   });
 });
 
-router.post('/authenticate', (request, response) => {
-  console.log(request.body);
-  User.findOne({
-    email: request.body.email
-  }, (error, user) => {
-    if (error) {
-      console.log(error);
-      response.status(500).json({error: 'Could not autenticate User'});
-    }
-
-    if (!user) {
-      return response.json({ success: false, message: 'Authentication failed. User not found.' });
-    } else if (user) {
-      user.validatePassword(request.body.password, (error, isValid) => {
-        if (error) {
-          return response.status.json({sucess: false, message: 'Authentication failed.'});
-        }
-        if (isValid) {
-          const token = jwt.sign(user, process.env.AUTH_KEY, {
-            expiresIn: '5m'
-          });
-
-          // return the information including token as JSON
-          response.json({
-            success: true,
-            message: 'Enjoy your token!',
-            token: token
-          });
-        }
-      });
-    }
-  })
-});
 module.exports  = router;

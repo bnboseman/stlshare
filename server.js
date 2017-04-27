@@ -7,7 +7,10 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
+const jwt    = require('jsonwebtoken');
 
+
+const {User} = require('./app/users/model');
 
 //Get API Resources
 const api = require('./app/api/routes');
@@ -20,8 +23,64 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 mongoose.Promise = global.Promise;
 
+const passport = require('passport');
+const passport_jwt = require('passport-jwt');
+
+let jwtOptions = {};
+jwtOptions.jwtFromRequest = passport_jwt.ExtractJwt.fromAuthHeader();
+jwtOptions.secretOrKey = process.env.AUTH_KEY;
+
+
+const strategy = new passport_jwt.Strategy(jwtOptions, (jwt_payload, next) => {
+  let user = User.findOne({id: jwt_payload._id});
+
+  if (user) {
+    next(null, jwt_payload);
+  } else {
+    next(null, false);
+  }
+});
+
+app.use(passport.initialize());
+
+passport.use(strategy);
+
 // Point static patch to dist
 app.use(express.static(path.join(__dirname, 'dist')));
+
+app.post('/authenticate', (request, response) => {
+  User.findOne({
+    email: request.body.email
+  }, (error, user) => {
+    if (error) {
+      console.log(error);
+      response.status(500).json({error: 'Could not autenticate User'});
+    }
+
+    if (!user) {
+      return response.json({ success: false, message: 'Authentication failed. User not found.' });
+    } else if (user) {
+      user.validatePassword(request.body.password, (error, isValid) => {
+        if (error) {
+          return response.status(400).json({sucess: false, message: 'Authentication failed.'});
+        }
+        if (isValid) {
+          const token = jwt.sign(user.apiRepr(), process.env.AUTH_KEY, {
+            expiresIn: '5m'
+          });
+
+          // return the information including token as JSON
+          response.json({
+            success: true,
+            token: token
+          });
+        } else {
+          return response.status(400).json({sucess: false, message: 'Authentication failed.'});
+        }
+      });
+    }
+  })
+});
 
 // Set our api routes
 app.use('/api', api);
