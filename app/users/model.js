@@ -24,7 +24,14 @@ const UserSchema =  new mongoose.Schema({
     enum: ['Admin','User','Banned','Mod','GAdmin','Unconfirmed']
 
   },
-  Favorites: [mongoose.Schema.Types.ObjectId],
+  Favorites: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Stl'
+  }],
+  Likes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Stl'
+  }],
   Active: Boolean
 });
 UserSchema.methods.apiRepr = function() {

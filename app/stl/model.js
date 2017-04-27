@@ -6,11 +6,21 @@ const StlSchema =  new mongoose.Schema({
     required: true
   },
   description: String,
-  owner: mongoose.Schema.Types.ObjectId,
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
   comments: [
     {
-      user: mongoose.Schema.Types.ObjectId,
-      text: String
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      },
+      text: String,
+      created: {
+        type: Date,
+        default: Date.now
+      }
     }
   ],
   license: String,
