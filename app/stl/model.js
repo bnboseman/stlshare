@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const _ = require('lodash');
 
 const StlSchema =  new mongoose.Schema({
   name: {
@@ -72,7 +73,7 @@ StlSchema.methods.apiRepr = () => {
 
 StlSchema.statics.processTags = (tags) => {
   re = /\s{0,},\s{0,1}/;
-  return tags.split(re);
+  return _.split(tags, re);
 }
 
 const Stl = mongoose.model('Stl', StlSchema);

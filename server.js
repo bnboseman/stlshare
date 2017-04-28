@@ -67,7 +67,7 @@ app.post('/authenticate', (request, response) => {
         }
         if (isValid) {
           const token = jwt.sign(user.apiRepr(), process.env.AUTH_KEY, {
-            expiresIn: '5m'
+            expiresIn: '24h'
           });
 
           // return the information including token as JSON

@@ -4,6 +4,7 @@ const multer = require('multer');
 const {getMissingFields} = require('../helpers/validation');
 const {Stl} = require('./model');
 const passport = require('passport');
+const _ = require('lodash');
 
 const storage = multer.diskStorage({
   destination: (request, file, callback) => {
@@ -13,7 +14,6 @@ const storage = multer.diskStorage({
     callback(null, file.filename)
   }
 });
-
 let upload = multer({storage: storage}).array('stlfiles', 6);
 router.get('/', (request, response) => {
   Stl
@@ -58,7 +58,7 @@ router.get('/:id', (request, response) => {
     });
 });
 
-router.post('/',  passport.authenticate('jwt', { session: false }), (request, response) => {
+router.post('/',  passport.authenticate('jwt', { session: false }), upload, (request, response) => {
   const required_fields = ['name', 'description'];
 
   let missingfields = getMissingFields(required_fields, request.body);
