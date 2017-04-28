@@ -17,7 +17,7 @@ export class StlListTagsComponent implements OnInit, OnDestroy {
     this.sub  = this.route.params.subscribe(params => {
       this.tag = params['tag'];
     });
-    console.log(this.tag);
+
     this.stlService.getTag(this.tag).subscribe(stls => {
       this.stls = stls;
     });

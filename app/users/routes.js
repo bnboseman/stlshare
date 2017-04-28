@@ -47,7 +47,7 @@ router.post('/', (request, response) => {
         })
         .then(User => response.status(201).json(User.apiRepr()))
         .catch(error => {
-          console.log(error);
+          console.error(error);
           response.status(500).json({error: 'Could not save User.'});
         });
     });

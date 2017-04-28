@@ -22,7 +22,6 @@ export class StlDetailsComponent implements OnInit, OnDestroy {
 
     this.stlService.getStl(this.id).subscribe(stl => {
       this.stl = stl;
-      console.log(this.stl);
     });
   }
 
