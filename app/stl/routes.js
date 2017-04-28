@@ -18,8 +18,8 @@ let upload = multer({storage: storage}).array('stlfiles', 6);
 router.get('/', (request, response) => {
   Stl
     .find()
-    .populate('owner', ['username', 'email', 'first_name', 'last_name', 'Role'])
-    .populate('comments.user', ['username', 'email', 'first_name', 'last_name', 'Role'])
+    .populate('owner', ['username', 'email', 'firstName', 'lastName', 'role'])
+    .populate('comments.user', ['username', 'email', 'firstName', 'lastName', 'role'])
     .sort('-created')
     .lean()
     .exec((error, stls)=> {
@@ -35,8 +35,8 @@ router.get('/', (request, response) => {
 router.get('/tag/:tag', (request, response) => {
   Stl
     .find()
-    .populate('owner', ['username', 'email', 'first_name', 'last_name', 'Role'])
-    .populate('comments.user', ['username', 'email', 'first_name', 'last_name', 'Role'])
+    .populate('owner', ['username', 'email', 'firstName', 'lastName', 'role'])
+    .populate('comments.user', ['username', 'email', 'firstName', 'lastName', 'role'])
     .where('tags').in([request.params.tag])
     .exec((error, stls) => {
       if(error) {
@@ -50,8 +50,8 @@ router.get('/tag/:tag', (request, response) => {
 
 router.get('/:id', (request, response) => {
   Stl.findById(request.params.id)
-    .populate('owner', ['username', 'email', 'first_name', 'last_name', 'Role'])
-    .populate('comments.user', ['username', 'email', 'first_name', 'last_name', 'Role'])
+    .populate('owner', ['username', 'email', 'firstName', 'lastName', 'role'])
+    .populate('comments.user', ['username', 'email', 'firstName', 'lastName', 'role'])
     .exec()
     .then(stl => {
       return response.json(stl.toObject({versionKey: false}))

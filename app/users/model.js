@@ -7,8 +7,8 @@ const UserSchema =  new mongoose.Schema({
     required: true,
     unique: true
   },
-  first_name: String,
-  last_name: String,
+  firstName: String,
+  lastName: String,
   email: {
     type: String,
     required: true,
@@ -19,27 +19,27 @@ const UserSchema =  new mongoose.Schema({
     type: String,
     required: true,
   },
-  Role: {
+  role: {
     type: String,
     enum: ['Admin','User','Banned','Mod','GAdmin','Unconfirmed']
 
   },
-  Favorites: [{
+  favorites: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Stl'
   }],
-  Likes: [{
+  likes: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Stl'
   }],
-  Active: Boolean
+  active: Boolean
 });
 UserSchema.methods.apiRepr = function() {
   return {
     id: this._id,
     username: this.username,
-    first: this.first_name,
-    last: this.last_name,
+    first: this.firstName,
+    last: this.lastName,
     email: this.email,
     role: this.role,
     favorites: this.favorites

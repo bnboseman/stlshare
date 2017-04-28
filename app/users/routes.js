@@ -7,6 +7,8 @@ const {getMissingFields} = require('../helpers/validation');
 
 router.get('/:id', (request, response) => {
   User.findById(request.params.id)
+    .populate('favorites', ['name','description','category','pictures','tags'])
+    .populate('likes', ['name','description','category','pictures','tags'])
     .exec()
     .then(user => {
       return response.json(user.apiRepr());
@@ -17,7 +19,9 @@ router.post('/', (request, response) => {
   let missingfields = getMissingFields(required_fields, request.body);
 
   if (missingfields.length) {
-    return response.status(400).json({error: `Missing ${missingfields.map(function(field) { return `\`${field}\`` }).join(', ')} in request body`});
+    return response.status(400).json(
+      {error: `Missing ${missingfields.map(function(field) { return `\`${field}\`` }).join(', ')} in request body`}
+    );
   }
 
   const password = request.body.password.trim();
@@ -38,11 +42,11 @@ router.post('/', (request, response) => {
       User
         .create({
           username: request.body.username,
-          first_name: request.body.first_name,
-          last_name: request.body.last_name,
+          firstName: request.body.firstName,
+          lastName: request.body.lastName,
           email: request.body.email,
           password: hash,
-          Role: "Subscriber"
+          role: "Subscriber"
         })
         .then(User => response.status(201).json(User.apiRepr()))
         .catch(error => {
