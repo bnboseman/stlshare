@@ -6,19 +6,20 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 
 import { StlService } from './stl.service';
+import { AuthenticationService } from './authentication.service';
 import { StlListComponent } from './stl/stl-list.component';
 import { StlDetailsComponent } from './stl/stl-details.component';
 import { StlListTagsComponent } from './stl/stl-list-tags.component';
 
 const ROUTES = [
+
   {
     path: '',
-    redirectTo: 'stl',
-    pathMatch: 'full'
+    component: StlListComponent
   },
   {
-    path: 'stl',
-    component: StlListComponent
+    path: 'stl/:id',
+    component: StlDetailsComponent
   },
   {
     path: 'tags/:tag',
@@ -39,7 +40,7 @@ const ROUTES = [
     HttpModule,
     RouterModule.forRoot(ROUTES)
   ],
-  providers: [StlService],
+  providers: [StlService, AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

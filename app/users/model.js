@@ -22,7 +22,6 @@ const UserSchema =  new mongoose.Schema({
   role: {
     type: String,
     enum: ['Admin','User','Banned','Mod','GAdmin','Unconfirmed']
-
   },
   favorites: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -31,8 +30,7 @@ const UserSchema =  new mongoose.Schema({
   likes: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Stl'
-  }],
-  active: Boolean
+  }]
 });
 UserSchema.methods.apiRepr = function() {
   return {
@@ -45,6 +43,19 @@ UserSchema.methods.apiRepr = function() {
     favorites: this.favorites
   }
 };
+
+UserSchema.methods.isActive = function() {
+  switch (this.role) {
+    case 'Admin':
+    case 'User':
+    case 'Mod':
+    case 'GAdmin':
+      return true;
+      break;
+    default:
+      return false;
+  }
+}
 
 UserSchema.methods.validatePassword = function(password, callback) {
   bcrypt.compare(password, this.password, (err, isValid) => {

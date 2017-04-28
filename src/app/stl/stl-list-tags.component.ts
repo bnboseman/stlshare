@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { StlService } from '../stl.service';
-import { StlDetailsComponent } from './stl-details.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-stl-list',
@@ -18,7 +17,7 @@ export class StlListTagsComponent implements OnInit, OnDestroy {
     this.sub  = this.route.params.subscribe(params => {
       this.tag = params['tag'];
     });
-    console.log(this.tag);
+
     this.stlService.getTag(this.tag).subscribe(stls => {
       this.stls = stls;
     });

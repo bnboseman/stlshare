@@ -48,6 +48,27 @@ router.get('/tag/:tag', (request, response) => {
     });
 });
 
+router.get('/category/:category', (request, response) => {
+  let category = _.startCase(request.params.category);
+  if (category == "Office") {
+    category = "Home & Office";
+  }
+
+  Stl
+    .find()
+    .populate('owner', ['username', 'email', 'firstName', 'lastName', 'role'])
+    .populate('commetns.user', ['username', 'email', 'firstName', 'lastName', 'role'])
+    .where({category: category})
+    .exec((error, stls) => {
+      if (error) {
+        console.error(error);
+        return response.status(500).json({"error": error.message});
+      }
+
+      return response.status(200).json(stls);
+    });
+});
+
 router.get('/:id', (request, response) => {
   Stl.findById(request.params.id)
     .populate('owner', ['username', 'email', 'firstName', 'lastName', 'role'])
@@ -87,20 +108,20 @@ router.post('/:id/comment',  passport.authenticate('jwt', { session: false }), (
     return response.status(500).json({error: "Comment could not be posted"});
   }
 
-  const options = {
+  const update = {
     $push: {
       comments: {
       user: request.user.id,
       text: text
     }}
   };
-  Stl.findOneAndUpdate({_id: request.body.id}, options, (error, doc) => {
+
+  Stl.findOneAndUpdate({_id: request.params.id}, update, {new: true}, (error, stl) => {
       if(error) {
         console.error(error);
         return response.status(500).json({error: 'Comment could not be posted'});
       }
-
-      return response.status(200).json({sucess: true});
+      return response.status(200).json({sucess: true, comments: stl.comments});
     });
 });
 router.delete('/:id',  passport.authenticate('jwt', { session: false }), (request, response) => {
@@ -123,8 +144,7 @@ router.put('/:id',  passport.authenticate('jwt', { session: false }), (request, 
     });
   }
 
-  const updated = {};
-  const updatableFields = ['name', 'description', 'pictures', 'tags'];
+  Stl.findById(request.params.id);
 });
 
 module.exports = router;

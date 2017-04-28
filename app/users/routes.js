@@ -14,6 +14,7 @@ router.get('/:id', (request, response) => {
       return response.json(user.apiRepr());
     });
 });
+
 router.post('/', (request, response) => {
   const required_fields = ['email', 'password', 'username'];
   let missingfields = getMissingFields(required_fields, request.body);
@@ -46,11 +47,11 @@ router.post('/', (request, response) => {
           lastName: request.body.lastName,
           email: request.body.email,
           password: hash,
-          role: "Subscriber"
+          role: "User"
         })
         .then(User => response.status(201).json(User.apiRepr()))
         .catch(error => {
-          console.log(error);
+          console.error(error);
           response.status(500).json({error: 'Could not save User.'});
         });
     });

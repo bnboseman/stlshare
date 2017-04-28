@@ -1,0 +1,24 @@
+.counter {
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+
+@media (max-width: 768px) {
+  .col-sm-4 {
+    margin: 10px 0;
+  }
+}
+
+.container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.container > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}

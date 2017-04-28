@@ -1,5 +1,29 @@
 <div class="container">
-  <div class="row" *ngFor="let stl of stls">
-    <app-stl-details [stl]="stl"></app-stl-details>
-  </div>
+    <div class="col-md-4" *ngFor="let stl of stls">
+        <img src="http://placehold.it/990x555" class="img-responsive">
+        <p class="h4"><a href="/stl/{{ stl._id }}">{{ stl.name }}</a></p>
+        <p>{{ stl.description }}</p>
+        <div class="row text-center">
+            <div class="col-sm-4">
+                <div class="bg-info text-info counter">
+                    <div class="center-block glyphicon glyphicon-eye-open"></div>
+                    {{stl.views}}
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="bg-info text-info counter">
+                    <div class="center-block glyphicon glyphicon-download-alt"></div>
+                    {{stl.downloads}}
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="bg-info text-info counter">
+                    <div class="center-block glyphicon glyphicon-comment"></div>
+                    {{stl.comments.length}}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
