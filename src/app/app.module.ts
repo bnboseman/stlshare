@@ -3,10 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
-import { AppComponent } from './app.component';
 
 import { StlService } from './stl.service';
 import { AuthenticationService } from './authentication.service';
+
+import { AppComponent } from './app.component';
 import { StlListComponent } from './stl/stl-list.component';
 import { StlDetailsComponent } from './stl/stl-details.component';
 import { StlListTagsComponent } from './stl/stl-list-tags.component';

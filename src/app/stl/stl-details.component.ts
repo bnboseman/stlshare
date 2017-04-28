@@ -11,11 +11,14 @@ import { ActivatedRoute } from '@angular/router';
 
 export class StlDetailsComponent implements OnInit, OnDestroy {
   stl: any;
+  currentUser: any;
   private id: any;
   private sub: any
 
   constructor(private stlService: StlService, private route: ActivatedRoute) { }
+
   ngOnInit() {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
     });
