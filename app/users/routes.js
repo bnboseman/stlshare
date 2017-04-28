@@ -12,6 +12,7 @@ router.get('/:id', (request, response) => {
       return response.json(user.apiRepr());
     });
 });
+
 router.post('/', (request, response) => {
   const required_fields = ['email', 'password', 'username'];
   let missingfields = getMissingFields(required_fields, request.body);
@@ -38,11 +39,11 @@ router.post('/', (request, response) => {
       User
         .create({
           username: request.body.username,
-          first_name: request.body.first_name,
-          last_name: request.body.last_name,
+          firstName: request.body.firstName,
+          lastName: request.body.lastName,
           email: request.body.email,
           password: hash,
-          Role: "Subscriber"
+          role: "User"
         })
         .then(User => response.status(201).json(User.apiRepr()))
         .catch(error => {

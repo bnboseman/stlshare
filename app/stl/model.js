@@ -33,6 +33,7 @@ const StlSchema =  new mongoose.Schema({
     order: Number,
     path: String
   }],
+  files: [String],
   tags: {
     type: [String],
     index: true
