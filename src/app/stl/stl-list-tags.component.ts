@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { StlService } from '../stl.service';
-import { StlDetailsComponent } from './stl-details.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-stl-list',

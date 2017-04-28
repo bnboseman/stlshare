@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Stl } from './stl';
+import { StlService } from '../stl.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-stl-details',
@@ -7,7 +9,24 @@ import { Stl } from './stl';
   styleUrls: ['./stl-details.component.css']
 })
 
-export class StlDetailsComponent {
-  @Input() stl: Stl;
-  constructor() { }
+export class StlDetailsComponent implements OnInit, OnDestroy {
+  stl: any;
+  private id: any;
+  private sub: any
+
+  constructor(private stlService: StlService, private route: ActivatedRoute) { }
+  ngOnInit() {
+    this.sub = this.route.params.subscribe(params => {
+      this.id = params['id'];
+    });
+
+    this.stlService.getStl(this.id).subscribe(stl => {
+      this.stl = stl;
+      console.log(this.stl);
+    });
+  }
+
+  ngOnDestroy() {
+    this.stl.unsubscribe();
+  }
 };

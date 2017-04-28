@@ -11,14 +11,14 @@ import { StlDetailsComponent } from './stl/stl-details.component';
 import { StlListTagsComponent } from './stl/stl-list-tags.component';
 
 const ROUTES = [
+
   {
     path: '',
-    redirectTo: 'stl',
-    pathMatch: 'full'
+    component: StlListComponent
   },
   {
-    path: 'stl',
-    component: StlListComponent
+    path: 'stl/:id',
+    component: StlDetailsComponent
   },
   {
     path: 'tags/:tag',
