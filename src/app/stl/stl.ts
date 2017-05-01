@@ -1,4 +1,5 @@
 export class Stl {
+  _id: string;
   name: String;
   description: String;
   owner: String;

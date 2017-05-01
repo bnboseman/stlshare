@@ -1,3 +1,38 @@
-<p>
-  stl-upload works!
-</p>
+<div class="container">
+  <div class="row">
+    <form name="form" (ngSubmit)="f.form.valid && upload()" #f="ngForm" novalidate>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" class="form-control" #name="ngModel" [(ngModel)]="stl.name" />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" id="description" name="description" class="form-control" #name="ngModel" [(ngModel)]="stl.description" />
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" name="category" class="form-control" #category="ngModel" [(ngModel)]="stl.category">
+          <option value="Architecture">Architecture</option>
+          <option value="Education">Education</option>
+          <option value="Home & Office">Home & Office</option>
+          <option value="Other">Other</option>
+          <option value="Science">Science</option>
+          <option value="Technology">Technology</option>
+          <option value="Toys">Toys</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="tags">Tags</label> (seperated by commas)
+        <input type="text" id="tags" name="tags" class="form-control" #tags="ngModel" [(ngModel)]="stl.tags" />
+      </div>
+
+      <div class="form-group">
+        <input type="file" ng2FileSelect [uploader]="uploader" multiple  />
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -3,8 +3,6 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-
-
 @Injectable()
 export class AuthenticationService {
   public token: string;
@@ -16,12 +14,11 @@ export class AuthenticationService {
   }
 
   login(email: string, password: string): Observable<boolean> {
-    return this.http.post('/authenticate', {
+    return this.http.post('/api/user/authenticate', {
       email: email,
       password: password
     })
       .map((response: Response) => {
-      console.log(response);
       const token = response.json() && response.json().token;
       if (token) {
         this.token = token;

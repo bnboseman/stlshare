@@ -7,8 +7,6 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-const jwt    = require('jsonwebtoken');
-
 
 const {User} = require('./app/users/model');
 
@@ -49,45 +47,11 @@ passport.use(strategy);
 // Point static patch to dist
 app.use(express.static(path.join(__dirname, 'dist')));
 
-app.post('/authenticate', (request, response) => {
-  User.findOne({
-    email: request.body.email
-  }, (error, user) => {
-    if (error) {
-      console.log(error);
-      response.status(500).json({error: 'Could not autenticate User'});
-    }
-
-    if (!user) {
-      return response.json({ success: false, message: 'Authentication failed. User not found.' });
-    } else if (user) {
-      user.validatePassword(request.body.password, (error, isValid) => {
-        if (error) {
-          return response.status(400).json({sucess: false, message: 'Authentication failed.'});
-        }
-        if (isValid) {
-          const token = jwt.sign(user.apiRepr(), process.env.AUTH_KEY, {
-            expiresIn: '24h'
-          });
-
-          // return the information including token as JSON
-          response.json({
-            success: true,
-            token: token
-          });
-        } else {
-          return response.status(400).json({sucess: false, message: 'Authentication failed.'});
-        }
-      });
-    }
-  })
-});
-
 // Set our api routes
 app.use('/api', api);
 
 
-// Catch all other routs and return the index file
+// Catch all other routes and return the index file
 app.get('*', (request, response) => {
   response.sendFile(path.join(__dirname, 'dist/index.html'));
 });
@@ -126,6 +90,7 @@ function closeServer() {
       console.log('Closing Server');
       server.close(err => {
         if (err) {
+          console.error('error', err);
           return reject(err);
         }
         resolve();

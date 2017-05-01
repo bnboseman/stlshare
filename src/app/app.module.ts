@@ -13,9 +13,9 @@ import { StlDetailsComponent } from './stl/stl-details.component';
 import { StlListTagsComponent } from './stl/stl-list-tags.component';
 import { LoginComponent } from './login/login.component';
 import { StlUploadComponent } from './stl/stl-upload.component';
+import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload/ng2-file-upload';
 
 const ROUTES = [
-
   {
     path: '',
     component: StlListComponent
@@ -25,12 +25,12 @@ const ROUTES = [
     component: LoginComponent
   },
   {
-    path: 'stl/:id',
-    component: StlDetailsComponent
-  },
-  {
     path: 'stl/new',
     component: StlUploadComponent
+  },
+  {
+    path: 'stl/:id',
+    component: StlDetailsComponent
   },
   {
     path: 'tags/:tag',
@@ -45,7 +45,9 @@ const ROUTES = [
     StlDetailsComponent,
     StlListTagsComponent,
     LoginComponent,
-    StlUploadComponent
+    StlUploadComponent,
+    FileSelectDirective,
+    FileDropDirective
   ],
   imports: [
     BrowserModule,

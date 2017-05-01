@@ -9,11 +9,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  user = new User('','');
+  user = new User('', '');
   loading = false;
   error = '';
 
-  constructor(private authenticationService: AuthenticationService, private router: Router) { }
+  constructor(private authenticationService: AuthenticationService,  private router: Router) {}
 
   ngOnInit() {
     this.authenticationService.logout();
@@ -26,15 +26,15 @@ export class LoginComponent implements OnInit {
       .subscribe(result => {
         if (result === true) {
           this.router.navigate(['/']);
-        } else {
-          this.error = 'Username or password incorrect';
-          this.loading = false;
         }
-      })
+      },
+      error => {
+        this.error = 'Username or password incorrect';
+        this.loading = false;
+      });
   }
 
   logout() {
     this.authenticationService.logout();
   }
-
 }

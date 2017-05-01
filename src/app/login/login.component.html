@@ -6,7 +6,7 @@
             <div class="form-group row" [ngClass]="{'has-error':f.submitted && !email.valid}">
                 <label for="email" class="col-sm-2">Email</label>
                 <div class="col-sm-10">
-                    <input type="email" class="form-control" name="email" placeholder="Email" #email="ngModel" [(ngModel)]="user.email">
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Email" #email="ngModel" [(ngModel)]="user.email">
                 </div>
 
                 <div *ngIf="f.submitted && !email.valid" class="help-block">Username is required</div>
@@ -15,7 +15,7 @@
             <div class="form-group row" [ngClass]="{'has-error':f.submitted && !email.valid}">
                 <label for="password" class="col-sm-2">Password</label>
                 <div class="col-sm-10">
-                    <input type="password" class="form-control" name="password" placeholder="Password" #password="ngModel" [(ngModel)]="user.password">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password" #password="ngModel" [(ngModel)]="user.password">
                 </div>
                 <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
             </div>
