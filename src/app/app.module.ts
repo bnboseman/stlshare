@@ -11,6 +11,8 @@ import { AppComponent } from './app.component';
 import { StlListComponent } from './stl/stl-list.component';
 import { StlDetailsComponent } from './stl/stl-details.component';
 import { StlListTagsComponent } from './stl/stl-list-tags.component';
+import { LoginComponent } from './login/login.component';
+import { StlUploadComponent } from './stl/stl-upload.component';
 
 const ROUTES = [
 
@@ -19,8 +21,16 @@ const ROUTES = [
     component: StlListComponent
   },
   {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
     path: 'stl/:id',
     component: StlDetailsComponent
+  },
+  {
+    path: 'stl/new',
+    component: StlUploadComponent
   },
   {
     path: 'tags/:tag',
@@ -33,7 +43,9 @@ const ROUTES = [
     AppComponent,
     StlListComponent,
     StlDetailsComponent,
-    StlListTagsComponent
+    StlListTagsComponent,
+    LoginComponent,
+    StlUploadComponent
   ],
   imports: [
     BrowserModule,

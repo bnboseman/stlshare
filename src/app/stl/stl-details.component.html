@@ -1,52 +1,57 @@
 <div class="container" *ngIf="stl">
-  <div class="row">
-    <div class="col-md-8 col-xs-12">
-        <h2 class="card-title">{{ stl.name }}</h2>
-      <img src="http://placehold.it/990x555" class="img-responsive">
-    </div>
-    <div class="col-md-4 col-xs-12">
-        <p class="h4">{{ stl.name }}</p>
-        <p class="card-text">{{ stl.description }}</p>
-        <hr /> Tags:
-        <span class="tags-container">
+    <div class="row">
+        <div class="col-md-8 col-xs-12">
+            <h2 class="card-title">{{ stl.name }}</h2>
+            <img src="http://placehold.it/990x555" class="img-responsive">
+        </div>
+        <div class="col-md-4 col-xs-12">
+            <p class="h4">{{ stl.name }}</p>
+            <p class="card-text">{{ stl.description }}</p>
+            <hr /> Tags:
+            <span class="tags-container">
       <a *ngFor="let tag of stl.tags" [href]="'/tags/' + tag">{{ tag }}</a>
     </span>
-        <div class="row text-center">
-            <div class="col-xs-4">
-                <div class="bg-info text-info counter">
-                    <div class="center-block glyphicon glyphicon-eye-open"></div>
-                    {{stl.views}}
+            <div class="row text-center">
+                <div class="col-xs-4">
+                    <div class="bg-info text-info counter">
+                        <div class="center-block glyphicon glyphicon-eye-open"></div>
+                        {{stl.views}}
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-xs-4">
-                <div class="bg-info text-info counter">
-                    <div class="center-block glyphicon glyphicon-download-alt"></div>
-                    {{stl.downloads}}
+                <div class="col-xs-4">
+                    <div class="bg-info text-info counter">
+                        <div class="center-block glyphicon glyphicon-download-alt"></div>
+                        {{stl.downloads}}
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-xs-4">
-                <div class="bg-info text-info counter">
-                    <div class="center-block glyphicon glyphicon-comment"></div>
-                    {{stl.comments.length}}
+                <div class="col-xs-4">
+                    <div class="bg-info text-info counter">
+                        <div class="center-block glyphicon glyphicon-comment"></div>
+                        {{stl.comments.length}}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-  </div>
-  <div class="row comments"  *ngIf="stl.comments">
-    <div *ngFor="let comment of stl.comments" class="col-md-12">
-      <a href="/users/{{comment.user.username}}">{{comment.user.username}}</a>
-      {{comment.text}}
+    <div class="row comments" *ngIf="stl.comments">
+        <div *ngFor="let comment of stl.comments" class="col-md-12">
+            <a href="/users/{{comment.user.username}}">{{comment.user.username}}</a> {{comment.text}}
+        </div>
     </div>
-  </div>
+    <div class="row add" *ngIf="user">
+        <form name="form" (ngSubmit)="f.form.valid && addComment()" #f="ngForm" novalidate>
+            <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+            <div *ngIf="success" class="alert alert-success">Your comment has been posted!</div>
 
-  <div class="row add"  *ngIf="currentUser">
-    <p class="h3">Add A Comment</p>
-    <form>
-      <textarea class="form-control"></textarea>
-      <button class="btn btn-primary pull-right">Submit</button>
-    </form>
-  </div>
+            <p class="h3">Add A Comment</p>
+            <div class="col-md-12 form-group">
+                <textarea class="form-control" [(ngModel)]="comment" name="comment" required></textarea>
+            </div>
+            <div class="col-md-12 form-group">
+                <button class="btn btn-primary pull-right">Submit</button>
+            </div>
+        </form>
+    </div>
 </div>
