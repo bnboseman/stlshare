@@ -26,14 +26,14 @@ export class StlService {
       .map(stls => stls.json());
   }
 
-  addComment(comment) {
+  addComment(id: string, comment: string) {
     const headers = new Headers({'Authorization': 'JWT ' + this.authenticationService.token});
     const options = new RequestOptions({headers: headers});
-    const body = JSON.stringify({
-      text: 'lorem ipsom dulor whajklsajfdlg fgjla wlk'
-    });
+    const body = {
+      text: comment
+    };
 
-    return this.http.post('/api/5902b289dbe6b0a28a0538ee/comment', body, options)
+    return this.http.post( `/api/stl/${id}/comment`, body, options)
       .map((response: Response) => response.json());
   }
 }

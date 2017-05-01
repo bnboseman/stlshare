@@ -8,18 +8,20 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class AuthenticationService {
   public token: string;
+  public currentUser;
 
   constructor(private http: Http) {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.token = currentUser && currentUser.token;
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.token = this.currentUser && this.currentUser.token;
   }
 
   login(email: string, password: string): Observable<boolean> {
-    return this.http.post('/authenticate', JSON.stringify({
+    return this.http.post('/authenticate', {
       email: email,
       password: password
-    }))
+    })
       .map((response: Response) => {
+      console.log(response);
       const token = response.json() && response.json().token;
       if (token) {
         this.token = token;

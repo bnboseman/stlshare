@@ -116,12 +116,15 @@ router.post('/:id/comment',  passport.authenticate('jwt', { session: false }), (
     }}
   };
 
-  Stl.findOneAndUpdate({_id: request.params.id}, update, {new: true}, (error, stl) => {
+  Stl.findOneAndUpdate({_id: request.params.id}, update, {new: true})
+    .populate('owner', ['username', 'email', 'firstName', 'lastName', 'role'])
+    .populate('comments.user', ['username', 'email', 'firstName', 'lastName', 'role'])
+    .exec((error, stl) => {
       if(error) {
         console.error(error);
         return response.status(500).json({error: 'Comment could not be posted'});
       }
-      return response.status(200).json({sucess: true, comments: stl.comments});
+      return response.status(200).json({sucess: true, stl: stl});
     });
 });
 router.delete('/:id',  passport.authenticate('jwt', { session: false }), (request, response) => {
