@@ -36,7 +36,8 @@ export class StlDetailsComponent implements OnInit, OnDestroy {
     }
 
     addComment() {
-        this.stlService.addComment(this.stl._id, this.comment).subscribe(result => {
+        this.stlService.addComment(this.stl._id, this.comment)
+          .subscribe(result => {
             if (result.stl) {
                 this.stl = result.stl;
                 this.success = true;

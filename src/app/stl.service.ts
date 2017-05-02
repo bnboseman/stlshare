@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Stl } from './stl/stl';
 import 'rxjs/add/operator/map';
 import { AuthenticationService } from './authentication.service';
 
@@ -36,4 +36,13 @@ export class StlService {
     return this.http.post( `/api/stl/${id}/comment`, body, options)
       .map((response: Response) => response.json());
   }
+
+  addStl(stl: Stl) {
+    const headers = new Headers({'Authorization': 'JWT ' + this.authenticationService.token});
+    const options = new RequestOptions({headers: headers});
+    return this.http.post('/api/stl', stl, options)
+      .map((response: Response) => response.json());
+  }
+
+
 }

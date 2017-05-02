@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {StlService } from '../stl.service';
 import { Stl } from './stl';
-import { FileUploader } from 'ng2-file-upload';
+import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 
 @Component({
   selector: 'app-stl-upload',
@@ -18,6 +18,10 @@ export class StlUploadComponent implements OnInit {
   constructor(private stlService: StlService) { }
   ngOnInit() {
     this.stl = new Stl;
+  }
+
+  uploadStl() {
+
   }
 
 }
