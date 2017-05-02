@@ -1,19 +1,41 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const jwt    = require('jsonwebtoken');
-
-const {User} = require('./model');
-const {getMissingFields} = require('../helpers/validation');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const { User } = require('./model');
+const { getMissingFields } = require('../helpers/validation');
 
 router.get('/:id', (request, response) => {
-  User.findById(request.params.id)
-    .populate('favorites', ['name','description','category','pictures','tags'])
-    .populate('likes', ['name','description','category','pictures','tags'])
-    .exec()
-    .then(user => {
-      return response.json(user.apiRepr());
-    });
+  if (mongoose.Types.ObjectId.isValid(request.params.id)) {
+    User.findById(request.params.id)
+      .populate('favorites', ['name', 'description', 'category', 'pictures', 'tags'])
+      .populate('likes', ['name', 'description', 'category', 'pictures', 'tags'])
+      .exec()
+      .then(user => {
+        if (user === null) {
+          return response.status(400).json({
+            error: `User ${request.params.id} could not be found`
+          });
+        }
+        return response.json(user.apiRepr());
+      });
+  } else {
+    User.findOne({
+        'username': request.params.id
+      })
+      .populate('favorites', ['name', 'description', 'category', 'pictures', 'tags'])
+      .populate('likes', ['name', 'description', 'category', 'pictures', 'tags'])
+      .exec()
+      .then(user => {
+        if (user === null) {
+          return response.status(400).json({
+            error: `User ${request.params.id} could not be found`
+          });
+        }
+        return response.json(user.apiRepr());
+      });
+  }
 });
 
 router.post('/', (request, response) => {
@@ -21,9 +43,9 @@ router.post('/', (request, response) => {
   let missingfields = getMissingFields(required_fields, request.body);
 
   if (missingfields.length) {
-    return response.status(400).json(
-      {error: `Missing ${missingfields.map(function(field) { return `\`${field}\`` }).join(', ')} in request body`}
-    );
+    return response.status(400).json({
+      error: `Missing ${missingfields.map(function(field) { return `\`${field}\`` }).join(', ')} in request body`
+    });
   }
 
   const password = request.body.password.trim();
@@ -32,13 +54,17 @@ router.post('/', (request, response) => {
   bcrypt.genSalt((error, salt) => {
     if (error) {
       console.error(error);
-      return response.status(500).json({error: 'Internal server error'});
+      return response.status(500).json({
+        error: 'Internal server error'
+      });
     }
 
     bcrypt.hash(password, salt, (error, hash) => {
       if (error) {
         console.error(error);
-        return response.status(500).json({error: 'Internal server error'});
+        return response.status(500).json({
+          error: 'Internal server error'
+        });
       }
 
       User
@@ -53,7 +79,9 @@ router.post('/', (request, response) => {
         .then(User => response.status(201).json(User.apiRepr()))
         .catch(error => {
           console.error(error);
-          response.status(500).json({error: 'Could not save User.'});
+          response.status(500).json({
+            error: 'Could not save User.'
+          });
         });
     });
   });
@@ -65,15 +93,23 @@ router.post('/authenticate', (request, response) => {
   }, (error, user) => {
     if (error) {
       console.log(error);
-      response.status(500).json({error: 'Could not autenticate User'});
+      response.status(500).json({
+        error: 'Could not autenticate User'
+      });
     }
 
     if (!user) {
-      return response.json({ success: false, message: 'Authentication failed. User not found.' });
+      return response.json({
+        success: false,
+        message: 'Authentication failed. User not found.'
+      });
     } else if (user) {
       user.validatePassword(request.body.password, (error, isValid) => {
         if (error) {
-          return response.status(400).json({sucess: false, message: 'Authentication failed.'});
+          return response.status(400).json({
+            sucess: false,
+            message: 'Authentication failed.'
+          });
         }
         if (isValid) {
           const token = jwt.sign(user.apiRepr(), process.env.AUTH_KEY, {
@@ -86,11 +122,14 @@ router.post('/authenticate', (request, response) => {
             token: token
           });
         } else {
-          return response.status(400).json({sucess: false, message: 'Authentication failed.'});
+          return response.status(400).json({
+            sucess: false,
+            message: 'Authentication failed.'
+          });
         }
       });
     }
   })
 });
 
-module.exports  = router;
+module.exports = router;
