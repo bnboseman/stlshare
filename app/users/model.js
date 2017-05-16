@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const { Stl } = require('../stl/model');
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -30,18 +31,25 @@ const UserSchema = new mongoose.Schema({
   likes: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Stl'
+  }],
+  stls: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Stl'
   }]
 });
+
 UserSchema.methods.apiRepr = function() {
-  return {
-    id: this._id,
-    username: this.username,
-    first: this.firstName,
-    last: this.lastName,
-    email: this.email,
-    role: this.role,
-    favorites: this.favorites
-  }
+    return {
+      id: this._id,
+      username: this.username,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email,
+      role: this.role,
+      favorites: this.favorites,
+      likes: this.likes
+    };
+  return promise;
 };
 
 UserSchema.methods.isActive = function() {
@@ -67,6 +75,16 @@ UserSchema.methods.validatePassword = function(password, callback) {
     callback(null, isValid);
   });
 };
+
+let  autoFavoritesAndLikes = function(next) {
+  this.populate('favorites', ['name', 'description', 'category', 'pictures', 'tags']);
+  this.populate('likes', ['name', 'description', 'category', 'pictures', 'tags']);
+  next();
+};
+
+UserSchema
+  .pre('findOne', autoFavoritesAndLikes)
+  .pre('findById', autoFavoritesAndLikes);
 
 const User = mongoose.model('User', UserSchema);
 

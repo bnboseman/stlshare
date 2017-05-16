@@ -57,7 +57,7 @@ const StlSchema =  new mongoose.Schema({
 });
 
 
-StlSchema.methods.apiRepr = () => {
+StlSchema.methods.apiRepr = function() {
   return {
     id: this._id,
     name: this.name,
@@ -72,10 +72,26 @@ StlSchema.methods.apiRepr = () => {
   }
 };
 
-StlSchema.statics.processTags = (tags) => {
+StlSchema.statics.findByOwner = function(id, callback) {
+  return this.find({owner: id}, callback);
+}
+
+StlSchema.statics.processTags = function(tags) {
   re = /\s{0,},\s{0,1}/;
   return _.split(tags, re);
 }
+
+let  autoOwnerAndComments = function(next) {
+  this.populate('owner', ['username', 'email', 'firstName', 'lastName', 'role']);
+  this.populate('comments.user', ['username', 'email', 'firstName', 'lastName', 'role']);
+  next();
+};
+
+StlSchema
+  .pre('find', autoOwnerAndComments)
+  .pre('findOneAndUpdate', autoOwnerAndComments)
+  .pre('findOne', autoOwnerAndComments)
+  .pre('findById', autoOwnerAndComments);
 
 const Stl = mongoose.model('Stl', StlSchema);
 module.exports = {Stl};

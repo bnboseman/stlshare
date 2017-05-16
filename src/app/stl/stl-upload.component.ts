@@ -12,8 +12,8 @@ import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 export class StlUploadComponent implements OnInit {
   public stl: Stl;
   public uploader: FileUploader = new FileUploader({url: '/api/stl'});
-  public hasBaseDropZoneOver:boolean = false;
-  public hasAnotherDropZoneOver:boolean = false;
+  public hasBaseDropZoneOver: Boolean = false;
+  public hasAnotherDropZoneOver: Boolean = false;
 
   constructor(private stlService: StlService) { }
   ngOnInit() {
@@ -21,7 +21,10 @@ export class StlUploadComponent implements OnInit {
   }
 
   uploadStl() {
-
+    this.stlService.addStl( this.stl )
+      .subscribe(response => {
+        console.log(response);
+      });
   }
 
 }

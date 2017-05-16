@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const {getMissingFields} = require('../helpers/validation');
 const {Stl} = require('./model');
+const {User} = require('../users/model');
 const passport = require('passport');
 const _ = require('lodash');
 
@@ -18,8 +19,6 @@ let upload = multer({storage: storage}).array('stlfiles', 6);
 router.get('/', (request, response) => {
   Stl
     .find()
-    .populate('owner', ['username', 'email', 'firstName', 'lastName', 'role'])
-    .populate('comments.user', ['username', 'email', 'firstName', 'lastName', 'role'])
     .sort('-created')
     .lean()
     .exec((error, stls)=> {
@@ -35,8 +34,6 @@ router.get('/', (request, response) => {
 router.get('/tag/:tag', (request, response) => {
   Stl
     .find()
-    .populate('owner', ['username', 'email', 'firstName', 'lastName', 'role'])
-    .populate('comments.user', ['username', 'email', 'firstName', 'lastName', 'role'])
     .where('tags').in([request.params.tag])
     .exec((error, stls) => {
       if(error) {
@@ -56,8 +53,6 @@ router.get('/category/:category', (request, response) => {
 
   Stl
     .find()
-    .populate('owner', ['username', 'email', 'firstName', 'lastName', 'role'])
-    .populate('commetns.user', ['username', 'email', 'firstName', 'lastName', 'role'])
     .where({category: category})
     .exec((error, stls) => {
       if (error) {
@@ -71,8 +66,6 @@ router.get('/category/:category', (request, response) => {
 
 router.get('/:id', (request, response) => {
   Stl.findById(request.params.id)
-    .populate('owner', ['username', 'email', 'firstName', 'lastName', 'role'])
-    .populate('comments.user', ['username', 'email', 'firstName', 'lastName', 'role'])
     .exec()
     .then(stl => {
       return response.json(stl.toObject({versionKey: false}))
@@ -95,7 +88,14 @@ router.post('/',  passport.authenticate('jwt', { session: false }), upload, (req
     owner: request.user.id,
     category: request.body.category,
     tags: Stl.processTags(request.body.tags),
-  }).then(Stl => response.status(201).json(Stl.toObject()))
+  }).then(Stl => {
+    const update = {
+      $push: {
+        stls: Stl._id
+      }
+    }
+    response.status(201).json(Stl.toObject())
+  })
     .catch(error => {
       console.error(error);
       response.status(500).json({error: 'Could not save STL'});
@@ -117,8 +117,6 @@ router.post('/:id/comment',  passport.authenticate('jwt', { session: false }), (
   };
 
   Stl.findOneAndUpdate({_id: request.params.id}, update, {new: true})
-    .populate('owner', ['username', 'email', 'firstName', 'lastName', 'role'])
-    .populate('comments.user', ['username', 'email', 'firstName', 'lastName', 'role'])
     .exec((error, stl) => {
       if(error) {
         console.error(error);
@@ -126,6 +124,11 @@ router.post('/:id/comment',  passport.authenticate('jwt', { session: false }), (
       }
       return response.status(200).json({sucess: true, stl: stl});
     });
+});
+
+router.post('/:id/favorite', passport.authenticate('jwt', {session: false}), (request, response) => {
+  stl = Stl.findById(request.params.id);
+
 });
 router.delete('/:id',  passport.authenticate('jwt', { session: false }), (request, response) => {
   Stl

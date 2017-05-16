@@ -4,13 +4,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const { User } = require('./model');
+const { Stl } = require('../stl/model');
 const { getMissingFields } = require('../helpers/validation');
 
 router.get('/:id', (request, response) => {
   if (mongoose.Types.ObjectId.isValid(request.params.id)) {
     User.findById(request.params.id)
-      .populate('favorites', ['name', 'description', 'category', 'pictures', 'tags'])
-      .populate('likes', ['name', 'description', 'category', 'pictures', 'tags'])
       .exec()
       .then(user => {
         if (user === null) {
@@ -18,14 +17,20 @@ router.get('/:id', (request, response) => {
             error: `User ${request.params.id} could not be found`
           });
         }
-        return response.json(user.apiRepr());
+        let userinfo = user.apiRepr();
+        Stl.find({owner: userinfo.id})
+          .populate('comments.user', ['username', 'email', 'firstName', 'lastName', 'role'])
+          .sort('-created')
+          .lean()
+          .exec((error, stls)=> {
+          userinfo.stls = stls;
+            return response.json(userinfo);
+          });
       });
   } else {
     User.findOne({
         'username': request.params.id
       })
-      .populate('favorites', ['name', 'description', 'category', 'pictures', 'tags'])
-      .populate('likes', ['name', 'description', 'category', 'pictures', 'tags'])
       .exec()
       .then(user => {
         if (user === null) {
@@ -33,7 +38,15 @@ router.get('/:id', (request, response) => {
             error: `User ${request.params.id} could not be found`
           });
         }
-        return response.json(user.apiRepr());
+        let userinfo = user.apiRepr();
+        Stl.find({owner: userinfo.id})
+          .populate('comments.user', ['username', 'email', 'firstName', 'lastName', 'role'])
+          .sort('-created')
+          .lean()
+          .exec((error, stls)=> {
+            userinfo.stls = stls;
+            return response.json(userinfo);
+          });
       });
   }
 });
