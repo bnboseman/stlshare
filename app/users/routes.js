@@ -18,8 +18,7 @@ router.get('/:id', (request, response) => {
           });
         }
         let userinfo = user.apiRepr();
-        Stl.find({owner: userinfo.id})
-          .populate('comments.user', ['username', 'email', 'firstName', 'lastName', 'role'])
+        Stl.findByOwner(userinfo.id)
           .sort('-created')
           .lean()
           .exec((error, stls)=> {
@@ -39,8 +38,7 @@ router.get('/:id', (request, response) => {
           });
         }
         let userinfo = user.apiRepr();
-        Stl.find({owner: userinfo.id})
-          .populate('comments.user', ['username', 'email', 'firstName', 'lastName', 'role'])
+        Stl.findByOwner(userinfo.id)
           .sort('-created')
           .lean()
           .exec((error, stls)=> {
